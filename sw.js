@@ -1,4 +1,4 @@
-var cacheName = 'pwa';
+var cacheName = 'calc';
 
 var filesToCache = [
   '/',
@@ -61,7 +61,7 @@ self.addEventListener('fetch', function(event) {
       return response || fetch(event.request);
     }).catch(function (err) {
       // if response not cached and network not available an error is thrown => return fallback image
-      return caches.match('/index.html');
+      return caches.match('index.html');
     })
   )
 });
