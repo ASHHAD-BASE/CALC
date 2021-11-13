@@ -1,4 +1,4 @@
-var cacheName = 'calc';
+var cacheName = 'calcy';
 
 var filesToCache = [
   '/CALC',
