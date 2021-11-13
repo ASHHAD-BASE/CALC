@@ -1,4 +1,4 @@
-var cacheName = 'newc';
+var cacheName = 'calc';
 
 var filesToCache = [
   '/CALC',
