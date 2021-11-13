@@ -1,9 +1,10 @@
-var cacheName = 'epwa';
+var cacheName = 'pwa';
 
 var filesToCache = [
   '/',
   'index.html',
   'sw.js',
+  'aths.js',
   'manifest.json',
   'favicon.png'
 ];
@@ -60,7 +61,7 @@ self.addEventListener('fetch', function(event) {
       return response || fetch(event.request);
     }).catch(function (err) {
       // if response not cached and network not available an error is thrown => return fallback image
-      return caches.match('index.html');
+      return caches.match('/index.html');
     })
   )
 });
