@@ -245,12 +245,13 @@ dom=[];
 		
 		this.toggleButton = new toggleButton(this).dom;
 		
-		this.dom.splice( this.dom.length - 2 , 0 , this.toggleButton );
 		
 		let specialFunctions = [ "AC" , "C" , "_back" , "_equal" ];
 		specialFunctions = specialFunctions.map( e =>
 			new SpecialPurposeButton( e ,this).dom
 		);
+		let clearButton = specialFunctions.splice( 1 , 1 , this.toggleButton )
+		this.dom.splice( this.dom.length - 2 , 0 , ...clearButton );
 		
 		operators.push( specialFunctions.pop() )
 		
