@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0, user-scalable=0">
+<title></title>
+<style type="text/css">
+:root{
+user-select:none;
+--hue:217;
+scroll-behavior: smooth;
+}
+body,html{
+margin:0;padding:0;
+display:flex;
+width:100%;height:100%;
+background:#000;color:#fff;
+}
+.wrapper{
+display:flex;flex-direction:column;
+width:100%;max-width:600px;
+height:100%;max-height:800px;
+margin:auto;
+}
+.wrapper>*{
+display:flex;
+flex:0 0 auto;
+width:100%;
+}
+.display{
+flex-direction:column;
+height:40%;overflow:hidden scroll;
+}
+.group{
+display:flex;width:100%;
+flex-direction:column;
+padding:0 5px;margin:auto auto 0;
+box-sizing:border-box;
+font-size:220%;
+opacity:.4;
+word-break: break-word;
+text-align:right;
+}
+.group sup{
+font-size:50%;
+}
+.group:last-child{
+opacity:1;
+}
+.group>*{
+display:flex;
+justify-content:flex-end;
+padding:2px;box-sizing:border-box;
+overflow:hidden;
+}
+.user_input{
+flex-wrap:wrap;
+
+}
+.user_input>*{
+padding:2px;
+border-radius:7px;
+border:1px solid transparent;
+}
+.user_input>*:active{
+border-color: #27f ;
+}
+.group:last-child .user_input{
+color:#fff;opacity:1;
+}
+.computed:last-child .user_input{
+opacity:.75;
+}
+.group:last-child .result{
+font-size:90%;opacity:.7;
+}
+.computed:last-child .result{
+font-size:180%;opacity:1;
+}
+.result:before{
+content:"=";padding:0 .5ch;
+}
+.result:empty:before{
+content:"";
+}
+.input{
+position:relative;
+height:60%;
+flex-wrap:wrap;
+text-align:center;
+}
+.input:before{
+position:absolute;
+top:0;left:0;right:0;
+content:"";display:inline-block;
+width:97.5%;height:1px;margin:auto;
+background:#333;
+}
+.input button{
+all:unset;
+position:relative;
+flex:0 0 25%;
+padding:0;
+font-size:180%;
+z-index:1;
+}
+.buttonShadow{
+position:absolute;display:block;
+width:60%;
+margin:0;padding:0;
+top:50%;left:50%;
+border-radius:50%;
+z-index:-1;opacity:0;
+transform:translateY(-50%)translateX(-50%);
+color:#171717;
+background-color:currentColor;border:1px solid #222;
+}
+.buttonShadow:after{
+content:"";display:block;
+padding-bottom:100%;
+}
+button:active .buttonShadow{
+opacity:1;
+}
+.toggle:before{
+content:'"';
+}
+.toggle.toFeet:before{
+content:"'";
+}
+.input .back{
+background: var(--back_icon) center/30% no-repeat ; 
+}
+.back .buttonShadow{
+background: var(--back_icon) center/42.5% no-repeat;
+background-color:currentColor;
+}
+.input .equal{
+font-size:200%;
+}
+.equal:before{
+content:"=";color:#fff;
+}
+.input .equal .buttonShadow{
+opacity:1;
+background:hsl( var(--hue) , 90% ,50% );
+}
+.input .equal:active .buttonShadow{
+opacity:1;
+background:hsl( var(--hue) , 100% ,45% );
+}
+.input .highlight{
+color:hsl( var(--hue) , 100% ,60% );
+}
+#hide{display:none;}
+@media (orientation: landscape) {
+  .wrapper{
+  flex-direction:row;
+  max-width:1600px;max-height:1200px;
+  }
+  .wrapper>*{
+  display:flex;
+  flex:0 0 auto;
+  width:50%;height:100%;
+  }
+  .input:before{
+  top:0;left:0;right:unset;bottom:0;
+  height:97.5%;width:1px;
+  }
+}
+@media (any-hover: hover) {
+  .input .equal:hover .buttonShadow{
+  transform:scale(.98)translateY(-50%)translateX(-50%);
+  }
+}
+
+</style>
+</head>
+<body>
+<div class="wrapper" id="hide" >
+	<div class="display">
+		<div class="group">
+			<div class="user_input">
+				<div class="number">5"5'</div>
+				<div class="symbol">+</div>
+				<div class="number">58888888888885"7'</div>
+			</div>
+			<div class="result">
+				<div class="number">61"</div>
+			</div>
+		</div>
+		<div class="group">
+		<div class="user_input">
+		<div class="number">5"5'</div>
+		<div class="symbol">+</div>
+		<div class="number">55"7'</div>
+		</div>
+		<div class="result">
+		<div class="number">61"</div>
+		</div>
+		</div>
+		<div class="group">
+		<div class="user_input">
+		<div class="number">5"5'</div>
+		<div class="symbol">+</div>
+		<div class="number">55"7'</div>
+		</div>
+		<div class="result computing">
+		<div class="number">61"</div>
+		</div>
+		</div>
+	</div>
+	<div class="input">
+	<button class="highlight" >AC</button>
+	<button class="highlight" >C</button>
+	<button class="highlight" >÷</button>
+	<button class="highlight" >⟨×</button>
+	<button>7</button>
+	<button>8</button>
+	<button>9</button>
+	<button class="highlight" >×</button>
+	<button>4</button>
+	<button>5</button>
+	<button>6</button>
+	<button class="highlight" >-</button>
+	<button>3</button>
+	<button>2</button>
+	<button>1</button>
+	<button class="highlight" >+</button>
+	<button class="highlight" >"</button>
+	<button>0</button>
+	<button>.</button>
+	<button class="equal">=</button>
+	</div>
+</div>
+<script type="text/javascript">
+function arrayinn(_a,_size=3){
+let _ta = [..._a];
+var _o = [], _size = 3;
+while (_ta.length > 0)
+  _o.push(_ta.splice(0,_size));
+return _o;
+}
+Number.prototype.toFeetInch = function() {
+let feet = Math.floor( this.valueOf() / 12)
+let inch = Math.round( this.valueOf() % 12 )
+return `${feet}" ${inch}'`;
+};
+
+class calculator{
+
+wrapper = document.createElement("div");
+display = document.createElement("div");
+input = document.createElement("div");
+//currentComputation = new computation(this);
+dom=[];
+
+	constructor(){
+		let root = document.querySelector(':root');
+		let rootStyles = getComputedStyle(root);
+		let hue = rootStyles.getPropertyValue('--hue');
+		root.style.setProperty(
+		"--back_icon",
+		`url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 0 24 24' width='24'%3E%3Cpath d='M0 0h24v24H0V0z' fill='none' /%3E%3Cpath fill='hsl( ${hue} , 100%25 ,60%25 )' d='M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z'/%3E%3C/svg%3E")`
+		)
+		this.wrapper.className = "wrapper";
+		this.display.className = "display";
+		this.input.className = "input";
+		
+		for(let i=0;i<10;i++){
+			this.addNumberButton(9-i)
+		}
+		
+		this.addNumberButton(".")
+		
+		let operators = [ "÷" , "×" , "-" , "+" ];
+		operators = operators.map( e =>
+		new opearotorButton( e ,this).dom
+		);
+		
+		this.toggleButton = new toggleButton(this).dom;
+		
+		this.dom.splice( this.dom.length - 2 , 0 , this.toggleButton );
+		
+		let specialFunctions = [ "AC" , "C" , "_back" , "_equal" ];
+		specialFunctions = specialFunctions.map( e =>
+			new SpecialPurposeButton( e ,this).dom
+		);
+		
+		operators.push( specialFunctions.pop() )
+		
+		let divide = operators.splice(0,1 , specialFunctions.pop() )
+		specialFunctions.push(...divide)
+		
+		this.dom.splice(0,0, ...specialFunctions )
+		
+		let temoAry = arrayinn(this.dom)
+		temoAry.forEach(e=>{
+		e.push( operators.shift() );
+		})
+		this.dom = temoAry.flat()
+		this.input.append(...this.dom);
+		this.wrapper.append(
+			this.display ,this.input
+		);
+		document.body.append(this.wrapper);
+	}
+	addNumberButton(i){
+	let t = new numberButton(i,this);
+	this.dom.push(t.dom);
+	}
+	clear( v ){
+		if( v.startsWith("A") ){
+			var range = document.createRange();
+			range.selectNodeContents(this.display);
+			range.deleteContents();
+		}else{
+			this.currentComputation.group.remove()
+		}
+		this.currentComputation = new computation(this);
+	}
+	compute (){
+		if(this.currentComputation){
+		if( this.currentComputation.computationQueue.length > 0 && this.currentComputation.currentNumber.isNotZero() ){
+			this.currentComputation.computeFinal();
+			this.currentComputation = null ;
+		}
+		}
+	}
+}
+class button{
+	dom = document.createElement("button");
+	constructor(n,type){
+		this.value=n;
+		this.type=type;
+		if( String(n).indexOf("_") < 0 ){
+		this.dom.innerText = n ;
+		}else{
+		this.dom.classList.add( n.substring(1) );
+		}
+		let buttonShadow = document.createElement("div");
+		buttonShadow.className = "buttonShadow" ;
+		this.dom.appendChild( buttonShadow );
+	}
+}
+
+class numberButton extends button{
+
+constructor(n,_calculator){
+	super(n,"number");
+	this.dom.addEventListener( "click" , ()=>{
+	if(!_calculator.currentComputation){
+	_calculator.currentComputation = new computation(_calculator);
+	}
+		_calculator.currentComputation.addNumber(this.value);
+	})
+}
+
+}
+
+class toggleButton extends button{
+
+constructor(_calculator){
+	super("","toggle");
+	this.dom.classList.add("highlight","toggle");
+	this.dom.addEventListener( "click" , ()=>{
+	if(!_calculator.currentComputation){
+	_calculator.currentComputation = new computation(_calculator);
+	}
+		_calculator.currentComputation.currentNumber.toggle();
+	})
+}
+
+}
+
+class opearotorButton extends button{
+
+constructor(n,_calculator){
+	super(n,"special");
+	this.dom.classList.add("highlight");
+	this.dom.addEventListener( "click" , ()=>{
+	if(!_calculator.currentComputation){
+	_calculator.currentComputation = new computation(_calculator);
+	}
+		_calculator.currentComputation.operate(this.value);
+	})
+}
+
+}
+
+class SpecialPurposeButton extends button{
+onclick = null
+constructor(n,_calculator){
+	super(n,"special");
+	this.dom.classList.add("highlight");
+	if( this.value.endsWith("C") ){
+		this.onclick = ()=>{
+			_calculator.clear( this.value );
+		}
+	}else{
+		this.onclick = ()=>{
+		if(!_calculator.currentComputation){
+		_calculator.currentComputation = new computation(_calculator);
+		}
+			_calculator.currentComputation.execute( this.value );
+		}
+	}
+	
+	this.dom.addEventListener( "click" , this.onclick )
+}
+
+}
+class number{
+	feet="0"
+	inch="0"
+	power = 1
+	isFeet=true
+	dom = document.createElement("div")
+	constructor( wrapper , _calculator , value ){
+	
+	if( wrapper ){
+		this.calculator = _calculator ;
+		this.dom.classList.add( "number" )
+		wrapper.append(this.dom)
+	}else{
+		this.feet = value.feet
+		this.inch = value.inch
+		this.power = value.power
+	}
+	
+	}
+	addNumber (n){
+	n= String(n)
+		if(this.isFeet){
+			this.feet+=n;
+		}else{
+			this.inch+=n;
+		}
+		this.updateDom()
+	}
+	canBeAValidNumber (n){
+		if(this.isFeet){
+			return !isNaN(this.feet+n);
+		}else{
+			return !isNaN(this.inch+n);
+		}
+	}
+	isNotZero (){
+	return ( ( Number(this.feet) != 0 ) || ( Number(this.inch) != 0 ) ) ;
+	}
+	updateDom () {
+		let text = "";
+		if( Number(this.feet) != 0 ){
+		text+= Number(this.feet) +"' ";
+		}
+		if( Number(this.inch) != 0 ){
+		text+= Number(this.inch) +'"'
+		}
+		this.dom.textContent=text.trim();
+	}
+	clearDigit(){
+		if(this.isFeet){
+		this.feet = this.feet.slice(0, -1); 
+		}else{
+		if( Number(this.inch) == 0 ){
+			this.toggle();
+			this.clearDigit();
+		}else{
+			this.inch = this.inch.slice(0, -1);
+		}
+		}
+		this.updateDom()
+	}
+	toggle (){
+		if( this.isFeet || ( ! this.isFeet && Number(this.inch) == 0  ) ){
+			this.isFeet ^= true ;
+		}
+		this.calculator.toggleButton.classList.toggle( 'toFeet' , !this.isFeet );
+	}
+	toInch (){
+		return ( Number( this.feet.indexOf(".")<0 ? this.feet : this.feet+ "0" )*Math.pow( 12 , this.power ) + Number( this.inch.indexOf(".")<0 ? this.inch : this.inch+"0" ) );
+	}
+	inchToFeetInch ( value , power ){
+	let converterConstant = Math.pow( 12 , power );
+	let feet = ""+ Math.floor( value / converterConstant )
+	let inch = ""+ ( value % converterConstant )
+	return {feet , inch, power};
+	};
+	toFeetInch (){
+		if( this.power == 0 ){
+			return Number(this.inch);
+		}else if( this.power == 1 ){
+			return `${Number(this.feet)}' ${Number(this.inch)}"` ;
+		}else{
+			let sup = ["<sup>",this.power+"</sup>"];
+			return `${Number(this.feet)}${sup.join("'")} ${Number(this.inch)}"${sup.join('"')}` ;
+		}
+	}
+	operate ( operant , operation ){
+		let operationMap = {
+							"×": {
+									weight : 1,
+									opcode : "*"
+								 } , 
+							"÷": {
+									weight : -1,
+									opcode : "/"
+								 }
+							} ,
+			 newPower = this.power ,
+			 opcode = operation.type ;
+		if( opcode in operationMap ){
+			newPower += operationMap[ opcode ].weight * operant.power ;
+			opcode = operationMap[ opcode ].opcode;
+		}else if( this.power != operant.power ){
+		return { status : "error" , message: "Invalid Operation" }
+		}
+
+		let result = eval( this.toInch() + opcode + operant.toInch() );
+		if( newPower == 0 ){
+		result = new number( null,null, { feet:"0" , inch:"0"+result , power:newPower } )
+		}else{
+		let value = this.inchToFeetInch( result , newPower );
+		result = new number( null,null, value )
+		}
+		return { status:"success" ,message:result}
+	}
+}
+class Operation{
+	dom = document.createElement("div")
+	constructor( type , wrapper , nodeToReplace ){
+	this.dom.classList.add( "symbol" )
+	if(nodeToReplace){
+	nodeToReplace.replaceWith( this.dom )
+	}else{
+	wrapper.append(this.dom)
+	}
+	this.type = type ;
+	this.dom.textContent = type ;
+	}
+}
+class computation{
+
+	group = document.createElement("div")
+	user_input = document.createElement("div")
+	result = document.createElement("div")
+	computationQueue = []
+	
+	constructor(_calculator){
+		this.currentNumber = new number( this.user_input , _calculator )
+		this.group.classList.add( "group" , "computing" );
+		this.user_input.classList.add("user_input")
+		this.result.classList.add("result")
+		this.group.append( this.user_input )
+		this.group.append( this.result )
+		this.calculator = _calculator
+		this.calculator.display.append( this.group )
+	}
+	addNumber(n){
+		if( this.currentNumber.canBeAValidNumber(n) ){
+			this.currentNumber.addNumber(n)
+			this.updateUserInputView()
+		}
+	}
+	updateUserInputView (){
+		let i = this.user_input;
+		let fs = 25 + ( Math.max( 25 - i.innerText.length , 0 )/25 )* 45 ;
+		i.style.fontSize = fs +"px";
+		this.calculator.display.scrollTop = this.calculator.display.scrollHeight ; 
+		this.compute();
+	}
+	execute ( v ){
+		if( v == "_back" ){
+			if( this.currentNumber.isNotZero() ){
+				this.currentNumber.clearDigit();
+				this.updateUserInputView();
+			}else if( this.computationQueue.length > 0 ){
+				let t = this.computationQueue.pop();
+				t.dom.remove();
+				this.currentNumber = this.computationQueue.pop();
+				this.currentNumber.toggle();
+				this.currentNumber.toggle();
+			}
+		}else{
+			this.calculator.compute();
+			this.updateUserInputView();
+		}
+		
+	}
+	operate ( operator ){
+		if( this.currentNumber.isNotZero() ){
+			this.computationQueue.push( this.currentNumber , new Operation( operator , this.user_input ) )
+			this.currentNumber = new number( this.user_input , this.calculator );
+			this.calculator.toggleButton.classList.toggle( 'toFeet' , false )
+		}else if( this.computationQueue.length > 0 ){
+			let t = this.computationQueue.pop();
+			this.computationQueue.push( new Operation( operator , this.user_input , t.dom ) );
+		}
+	}
+	compute (){
+	let a = [ ...this.computationQueue ]
+	a.push( this.currentNumber )
+	let dmas = [ "÷" , "×" , "-" , "+" ];
+		//dmas.forEach( o =>{
+			for( let i=0 ; i<a.length ; i++ ){
+				if( a[i]  instanceof Operation ){
+					//if( a[i].type == o || true ){
+						let res = a[ i-1 ].operate( a[ i+1 ] , a[ i ] )
+						if( res.status == "error" ){
+						this.result.innerHTML = res.message ;
+						return false;
+						}else if( res.status == "success" ){
+							a.splice( i-1 , 3 , res.message );
+						}
+						i-=1;
+					//}
+				}
+			}
+		//});
+		
+		this.result.innerHTML = a[0].toFeetInch() ;
+		
+	}
+	computeFinal(){
+	this.compute();
+	this.group.classList.replace( "computing" , "computed" );
+	}
+}
+let myCalculator = new calculator();
+
+
+</script>
+</body>
+</html>

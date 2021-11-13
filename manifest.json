@@ -1,0 +1,16 @@
+{
+  "short_name": "FEET INCH CALCULATOR",
+  "name": "CALCULATOR by ASHHAD",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  //"display": "standalone",
+   "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#000000"
+}
