@@ -1,12 +1,12 @@
-var cacheName = 'calc';
+var cacheName = 'ash';
 
 var filesToCache = [
-  '/',
-  'index.html',
-  'sw.js',
-  'aths.js',
-  'manifest.json',
-  'favicon.png'
+  '/CALC',
+  '/CALC/index.html',
+  '/CALC/sw.js',
+  '/CALC/aths.js',
+  '/CALC/manifest.json',
+  '/CALC/favicon.png'
 ];
 
 // todo: check if service worker is installed before
@@ -61,7 +61,7 @@ self.addEventListener('fetch', function(event) {
       return response || fetch(event.request);
     }).catch(function (err) {
       // if response not cached and network not available an error is thrown => return fallback image
-      return caches.match('index.html');
+      return caches.match('/CALC/index.html');
     })
   )
 });
