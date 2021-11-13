@@ -11,6 +11,6 @@
   "start_url": "/CALC/",
   //"display": "standalone",
    "display": "fullscreen",
-  "orientation": "portrait",
+  //"orientation": "portrait",
   "background_color": "#000000"
 }
