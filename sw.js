@@ -1,11 +1,11 @@
-var cacheName = 'c';
+var cacheName = 'newc';
 
 var filesToCache = [
   '/CALC',
   '/CALC/index.html',
   '/CALC/sw.js',
   '/CALC/aths.js',
-  '/CALC/manifest.json',
+  //'/CALC/manifest.json',
   '/CALC/favicon.png'
 ];
 
